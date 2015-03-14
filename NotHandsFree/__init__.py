@@ -12,3 +12,9 @@ app.config['REDIS_CHAN'] = "howmany"
 sentry = Sentry(app)
 redis = redis.from_url(app.config['REDIS_URL'])
 sockets = Sockets(app)
+
+from NotHandsFree.ws import Backend
+backend = Backend()
+backend.start()
+
+from NotHandsFree import views

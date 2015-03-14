@@ -20,14 +20,25 @@ var mode, dest, content = null;
 
 
 receiver.onmessage = function(message){
-    if (message instanceof String) {
-        console.log("MESSAGE IS STRING");
-    }
-    console.log(message);
-    console.log(JSON.parse(message['data']));
+    data = message['data'].replace(/'/g, '"');
+    data = JSON.parse(data);
+
+    mode_gestures = Array(
+        "newcall"
+    )
+
+    console.log(data);
+
     if (phase === 0) {
+        console.log(data['gesture']);
         // We're in the Mode Select Phase
-        
+        if (mode_gestures.indexOf(data['gesture']) != -1) {
+            // We have a new Mode!
+            console.log("New Mode");
+            if (data['gesture'] === 'newcall') {
+                console.log("New Call Time!");
+            }
+        }
     }
 };
 

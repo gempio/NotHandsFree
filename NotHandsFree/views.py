@@ -1,4 +1,4 @@
-from NotHandsFree import app, backend
+from NotHandsFree import app, backend, sockets
 
 from flask import render_template, jsonify
 

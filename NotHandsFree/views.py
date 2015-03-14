@@ -8,6 +8,10 @@ import gevent
 def home():
     return render_template("home.html")
 
+@app.route("/train")
+def train():
+    return render_template("train.html")
+
 @app.route("/input", methods=['POST'])
 def recv_input():
     json = request.get_json(force=True)

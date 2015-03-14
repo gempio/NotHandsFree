@@ -27,6 +27,11 @@ receiver.onmessage = function(message){
 
     if (data['gesture'] === 'cancel') {
         phase = 0;
+        mode, dest, content = null;
+
+        $('#modeTitle').text("Select Mode");
+        $('#modeIcon').attr("class", "fa fa-flag-checkered");
+        $('#instructions').text("Gesture your new Mode");
     } else if (phase === 0) {
         // We're in the Mode Select Phase
         if (mode_gestures.indexOf(data['gesture']) != -1) {

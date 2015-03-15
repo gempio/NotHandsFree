@@ -1,7 +1,9 @@
 from NotHandsFree import app, backend, sockets, redis, db
 from NotHandsFree.models import Speeddial
 
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, url_for
+from twilio import twiml
+from twilio.rest import TwilioRestClient
 
 import gevent
 
@@ -34,6 +36,41 @@ def get_all_speeddial():
     for assoc in Speeddial.query.all():
         dials.append({'gesture': assoc.gesture, 'number': assoc.number})
     return jsonify(speeddial=dials)
+
+@app.route("/call", methods=['POST'])
+def create_call():
+    to_call = request.form['gesture']
+    association = Speeddial.query.filter_by(gesture=to_call).first_or_404()
+    number = association.number
+
+    try:
+        tclient = TwilioRestClient(app.config['TWILIO_ACCOUNT_SID'],
+                                   app.config['TWILIO_AUTH_TOKEN'])
+
+    except Exception as e:
+        msg = 'Missing configuration variable: {0}'.format(e)
+        return jsonify({'error': msg})
+
+    try:
+        twilio_client.calls.create(from=app.config['TWILIO_CALLER_ID'],
+                                   to=number,
+                                   url=url_for('outbound',
+                                               _external=True))
+    except Exception as e:
+        app.logger.error(e)
+        return jsonify({'error': str(e)})
+    return jsonify({'message': 'Call incoming!'})
+
+@app.route('/outbound', methods=['POST'])
+def outbound():
+    response = twiml.Response()
+
+    response.say("Thank you for calling. You will be connected shortly.",
+                 voice='alice')
+
+    with response.dial() as dial:
+        dial.number("+447415722341")
+    return str(response)
 
 @app.route("/input", methods=['POST'])
 def recv_input():

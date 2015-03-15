@@ -1,1 +1,26 @@
 {% extends "base.html" %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="panel panel-primary">
+				<form action method="POST">
+					<div class="panel-heading">
+						<h3 class="panel-title">Add A Speed Dial</h3>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<input name="number" class="form-control" type="phone" placeholder="Phone Number"></input>
+						</div>
+						<div class="form-group">
+							<input name="gesture" class="form-control" type="text" placeholder="Gesture"></input>
+						</div>
+					</div>
+					<div class="panel-footer">
+						<button class="btn btn-primary btn-lg btn-block">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

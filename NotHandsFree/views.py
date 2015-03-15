@@ -1,16 +1,36 @@
-from NotHandsFree import app, backend, sockets, redis
+from NotHandsFree import app, backend, sockets, redis, db
+from NotHandsFree.models import Speeddial
 
 from flask import render_template, jsonify, request
 
 import gevent
 
+import logging
+from logging import StreamHandler
+file_handler = StreamHandler()
+app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
+app.logger.addHandler(file_handler)
+
 @app.route("/")
 def home():
     return render_template("home.html")
 
-@app.route("/train")
+@app.route("/train", methods=['GET', 'POST'])
 def train():
+    if request.method == "POST":
+        # We're creating a new speeddial
+        newdial = Speeddial(
+            gesture=request.form['gesture'],
+            number=request.form['number']
+        )
+
+        db.session.add(newdial)
+        db.session.commit()
     return render_template("train.html")
+
+@app.route("/speed")
+def get_all_speeddial():
+    return jsonify(speeddial=Speeddial.query.all())
 
 @app.route("/input", methods=['POST'])
 def recv_input():

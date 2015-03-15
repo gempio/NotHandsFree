@@ -30,7 +30,10 @@ def train():
 
 @app.route("/speed")
 def get_all_speeddial():
-    return jsonify(speeddial=Speeddial.query.all())
+    dials = []
+    for assoc in Speeddial.query.all():
+        dials.append({'gesture': assoc.gesture, 'number': assoc.number})
+    return jsonify(speeddial=dials)
 
 @app.route("/input", methods=['POST'])
 def recv_input():

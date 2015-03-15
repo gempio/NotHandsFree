@@ -2,6 +2,7 @@ import os
 import redis
 from flask import Flask
 from flask_sockets import Sockets
+from flask.ext.heroku import Heroku
 from flask.ext.sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
 
